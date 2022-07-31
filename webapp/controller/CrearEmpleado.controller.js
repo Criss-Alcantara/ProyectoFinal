@@ -18,6 +18,8 @@ sap.ui.define(
 
                 this._wizard = this.byId("W_CrearEmpleado");
 
+                this._oNavContainer = this.byId("NC_CrearEmpleado");
+
                 this._model = new sap.ui.model.json.JSONModel({});
 
                 this.getView().setModel(this._model);
@@ -33,6 +35,10 @@ sap.ui.define(
             },
 
             onStep2(oEvent) {
+
+                var typeEmployeeStep = this.byId("WS_Tipo_Emp");
+
+                var dataEmployeeStep = this.byId("WS_Data_Emp");
 
                 var Salary = 0;
 
@@ -56,14 +62,34 @@ sap.ui.define(
                 this._model.setData({
                     _type: oTypeSel,
                     Type: Type,
-                    _Salary: Salary
+                    Salary: Salary
                 });
+
+                if (this._wizard.getCurrentStep() === typeEmployeeStep.getId()) {
+
+                    $.sap.ValidarNombre = false;
+
+                    $.sap.ValidarApellido = false;
+
+                    $.sap.ValidarDNI = false;
+
+                    $.sap.ValidarFecha = false;
+
+                    this._wizard.nextStep();
+
+                } else {
+
+                    this._wizard.goToStep(dataEmployeeStep);
+
+                }
 
             },
 
             onValidateDNI(oEvent) {
 
-                if (this._model.getProperty("_type") !== "Autonomo") {
+                var isValid = true;
+
+                if (this.getView().getModel().getData().Type !== "1") {
 
                     var dni = oEvent.getParameter("value");
 
@@ -97,77 +123,146 @@ sap.ui.define(
 
                             this._model.setProperty("/_DniState", "Error");
 
+                            isValid = false;
+
                         } else {
 
                             this._model.setProperty("/_DniState", "None");
-
-                            this.dataEmployeeValidation();
 
                         }
 
                     } else {
 
                         this._model.setProperty("/_DniState", "Error");
+
+                        isValid = false;
                     }
+
+                    $.sap.ValidarDNI = isValid;
+
+                } else {
+
+                    var isValid = true;
+
+                    if (!oEvent.getSource().getValue()) {
+
+                        this._model.setProperty("/_DniState", "Error");
+
+                        isValid = false;
+
+                        this._wizard.invalidateStep(this.byId("WS_Data_Emp"));
+
+                    } else {
+
+                        this._model.setProperty("/_DniState", "None");
+
+                        this._wizard.validateStep(this.byId("WS_Data_Emp"));
+                    };
+
+                    $.sap.ValidarDNI = isValid;
+
                 }
             },
 
-            onValidarData(oEvent) {
+            onValidarNombre() {
 
-                var oData = this._model.getData();
+                $.sap.ValidarNombre = true;
 
-                var oValid = false;
+                var object = this._model.getData().FirstName;
 
-                var oObject = object;
+                if (!object || object.length < 0) {
 
-                var oEvent1 = oEvent;
+                    $.sap.ValidarNombre = false;
 
-                //Nombre
-                if (!object.FirstName) {
-                    object._FirstNameState = "Error";
-                    isValid = false;
                 } else {
-                    object._FirstNameState = "None";
-                }
 
-                
+                    this._model.setProperty("/_FirstNameState", "None");
 
-                //Apellidos
-                if (!object.LastName) {
-                    object._LastNameState = "Error";
-                    isValid = false;
-                } else {
-                    object._LastNameState = "None";
-                }
-
-                //Fecha
-                if (!object.CreationDate) {
-                    object._CreationDateState = "Error";
-                    isValid = false;
-                } else {
-                    object._CreationDateState = "None";
-                }
-
-                //DNI
-                if (!object.Dni) {
-                    object._DniState = "Error";
-                    isValid = false;
-                } else {
-                    object._DniState = "None";
-                }
-
-                if (isValid) {
-                    this._wizard.validateStep(this.byId("dataEmployeeStep"));
-                } else {
-                    this._wizard.invalidateStep(this.byId("dataEmployeeStep"));
-                }
-                //Si hay callback se devuelve el valor isValid
-                if (callback) {
-                    callback(isValid);
+                    this._wizard.validateStep(this.byId("WS_Data_Emp"));
                 }
 
             },
 
+            onValidarApellido() {
+
+                $.sap.ValidarApellido = true;
+
+                var object = this._model.getData().LastName;
+
+                if (!object || object.length < 0) {
+
+                    $.sap.ValidarApellido = false;
+
+                } else {
+
+                    this._model.setProperty("/_LastNameState", "None");
+
+                    this._wizard.validateStep(this.byId("WS_Data_Emp"));
+                }
+
+            },
+
+            onValidarFecha() {
+
+                $.sap.ValidarFecha = true;
+
+                var object = this._model.getData().CreationDate;
+
+                if (!object || object.length < 0) {
+
+                    $.sap.ValidarFecha = false;
+
+                } else {
+
+                    this._model.setProperty("/_CreationDateState", "None");
+
+                    this._wizard.validateStep(this.byId("WS_Data_Emp"));
+                }
+
+            },
+
+            onValidateData() {
+
+                if ($.sap.ValidarNombre === false) {
+
+                    this._wizard.setCurrentStep(this.byId("WS_Data_Emp"));
+
+                    this._model.setProperty("/_FirstNameState", "Error");
+
+                    this._wizard.invalidateStep(this.byId("WS_Data_Emp"));
+
+                };
+
+                if ($.sap.ValidarApellido === false) {
+
+                    this._wizard.setCurrentStep(this.byId("WS_Data_Emp"));
+
+                    this._model.setProperty("/_LastNameState", "Error");
+
+                    this._wizard.invalidateStep(this.byId("WS_Data_Emp"));
+
+                };
+
+                if ($.sap.ValidarFecha === false) {
+
+                    this._wizard.setCurrentStep(this.byId("WS_Data_Emp"));
+
+                    this._model.setProperty("/_CreationDateState", "Error");
+
+                    this._wizard.invalidateStep(this.byId("WS_Data_Emp"));
+                };
+
+                if ($.sap.ValidarDNI === false) {
+
+                    this._wizard.setCurrentStep(this.byId("WS_Data_Emp"));
+
+                    this._model.setProperty("/_DniState", "Error");
+
+                    this._wizard.invalidateStep(this.byId("WS_Data_Emp"));
+
+                };
+
+            },
 
             onFileChange() {
 
@@ -225,15 +320,163 @@ sap.ui.define(
             },
 
             onEditType() {
-                _editStep.bind(this)("WS_Tipo_Emp");
+
+                var oEditType = function () {
+
+                    this._wizard.goToStep(this._wizard.getSteps()[0]);
+
+                    this._oNavContainer.detachAfterNavigate(oEditType);
+
+                }.bind(this);
+
+                this._oNavContainer.attachAfterNavigate(oEditType);
+
+                this._oNavContainer.back();
             },
 
             onEditData() {
-                _editStep.bind(this)("WS_Data_Emp");
+
+                var oEditData = function () {
+
+                    this._wizard.goToStep(this._wizard.getSteps()[1]);
+
+                    this._oNavContainer.detachAfterNavigate(oEditData);
+
+                }.bind(this);
+
+                this._oNavContainer.attachAfterNavigate(oEditData);
+
+                this._oNavContainer.back();
+
             },
 
             onEditDataAdic() {
-                _editStep.bind(this)("WS_Data_Adic");
+
+                var oEditDataAdic = function () {
+
+                    this._wizard.goToStep(this._wizard.getSteps()[2]);
+
+                    this._oNavContainer.detachAfterNavigate(oEditDataAdic);
+
+                }.bind(this);
+
+                this._oNavContainer.attachAfterNavigate(oEditDataAdic);
+
+                this._oNavContainer.back();
+            },
+
+            onSaveEmp() {
+
+                var oItems = this.getView().byId("uploadCollection").getItems();
+
+                var oArray = [];
+
+                this._model.setProperty("/_numFiles", oItems.length);
+
+                if (oItems.length > 0) {
+
+                    for (let i in oItems) {
+
+                        oArray.push({ DocName: oItems[i].getFileName(), MimeType: oItems[i].getMimeType() });
+
+                    };
+
+                    this._model.setProperty("/_files", arrayFiles);
+
+                } else {
+
+                    this._model.setProperty("/_files", []);
+
+                    this._wizard.goToStep(this.byId("WS_Data_Emp"));
+
+                    this._oNavContainer.to(this.byId("revisarData"));
+
+                };
+            },
+
+            onSave() {
+
+                var oData = this.getView().getModel().getData();
+
+                var oDataFinal = {};
+
+                for (var i in oData) {
+
+
+                    if (i.indexOf("_") !== 0) {
+
+                        oDataFinal[i] = oData[i];
+                    }
+                };
+
+                var oBody = {
+                    Type: (oDataFinal.Type === 'Interno' ? '0' : oDataFinal.Type === 'Autonomo' ? '1' : '2'),
+                    SapId: this.getOwnerComponent().SapId,
+                    FirstName: oDataFinal.FirstName,
+                    LastName: oDataFinal.LastName,
+                    Dni: oDataFinal.Dni,
+                    CreationDate: oDataFinal.CreationDate,
+                    Comments: oDataFinal.Comments,
+                    UserToSalary: [{
+                        Amount: parseFloat(oDataFinal.Salary).toString(),
+                        Comments: oDataFinal.Comments,
+                        Waers: "EUR"
+                    }]
+                };
+
+                this.getView().getModel("oDataModel").create("/Users", oBody, {
+                    success: function (data) {
+                        this.newUser = data.EmployeeId;
+                        this.onStartUpload();
+                        MessageBox.success("Cambios guardados");
+                    }.bind(this),
+                    error: function () {
+                        MessageBox.error("Cambios no guardados");
+                    }.bind(this)
+                });
+            },
+
+            onStartUpload() {
+
+                var oUploadCollection = this.byId("uploadCollection");
+
+                oUploadCollection.upload();
+
+                var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
+
+                oRouter.navTo("RouteMainView", {}, true);
+            },
+
+            onCancel() {
+
+                var oEditType = function () {
+
+                    this._wizard.goToStep(this._wizard.getSteps()[0]);
+
+                    this._oNavContainer.detachAfterNavigate(oEditType);
+
+                }.bind(this);
+
+                this._oNavContainer.attachAfterNavigate(oEditType);
+
+                this._oNavContainer.back()
+
+            },
+
+            onCancelFirst() {
+
+                this._wizard.discardProgress(this._wizard.getSteps()[0]);
+
+                this._model.setData({
+                    Type: "Interno",
+                    FirstNameState: "Error",
+                    LastNameState: "Error",
+                    DniState: "Error"
+                });
+
+                var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
+
+                oRouter.navTo("RouteMainView", {}, true);
             }
 
         });

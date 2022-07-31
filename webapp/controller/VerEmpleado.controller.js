@@ -3,15 +3,17 @@ sap.ui.define(
         "sap/ui/core/mvc/Controller",
         "sap/m/MessageBox",
         "sap/ui/model/Filter",
-        "sap/ui/model/FilterOperator"
+        "sap/ui/model/FilterOperator",
+        "sap/ui/core/routing/History"
     ],
     /**
      * @param {typeof sap.ui.core.mvc.Controller} BaseController
      * @param {typeof sap.m.MessageBox} MessageBox
      * @param {typeof sap.ui.model.Filter} Filter
      * @param {typeof sap.ui.model.FilterOperator} FilterOperator
+     * @param {typeof sap.ui.model.History} History
      */
-    function (BaseController, MessageBox, Filter, FilterOperator) {
+    function (BaseController, MessageBox, Filter, FilterOperator, History) {
         "use strict";
 
         return BaseController.extend("proyectofinal.proyectofinal.controller.controller.VerEmpleado", {
@@ -91,8 +93,16 @@ sap.ui.define(
 
             },
 
-            onDarBaja() {
+            onDarBaja(oEvent) {
 
+                var oView = this.getView();
+
+                var oComponent = this.getOwnerComponent();
+
+                var oId = this.employeeId;
+
+                var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
+                
                 MessageBox.warning("Se dará de baja al Empleado, ¿Desea continuar?", {
 
                     actions: [MessageBox.Action.OK, MessageBox.Action.CANCEL],
@@ -103,19 +113,17 @@ sap.ui.define(
 
                         if (sAction === "OK") {
 
-                            this.getView().getModel("oDataModel").remove("/Users(EmployeeId='" + this.employeeId + "',SapId='" + this.getOwnerComponent().SapId + "')", {
+                            oView.getModel("oDataModel").remove("/Users(EmployeeId='" + oId + "',SapId='" + oComponent.SapId + "')", {
 
                                 success: function (data) {
 
-                                    sap.m.MessageToast.show(this.getView().getModel("i18n").getResourceBundle().getText("BajaEmpleado"));
+                                    sap.m.MessageToast.show(oView.getModel("i18n").getResourceBundle().getText("bajaCorrecta"));
 
-                                    this._splitAppEmployee.to(this.createId("detailSelectEmployee"));
+                                    oRouter.navTo("RouteMainView", {}, true);
 
                                 }.bind(this),
 
                                 error: function (e) {
-
-                                    sap.base.Log.info(e);
 
                                 }.bind(this)
                             });
@@ -167,7 +175,7 @@ sap.ui.define(
 
                         MessageBox.success("Ascenso Correcto");
 
-                        this.onCloseRiseDialog();
+                        this.onDialogCancel();
 
                     }.bind(this),
 
@@ -189,7 +197,7 @@ sap.ui.define(
 
             },
 
-            onFileChange() {
+            onFileChange(oEvent) {
 
                 let oUplodCollection = oEvent.getSource();
 
@@ -204,7 +212,7 @@ sap.ui.define(
                 oUplodCollection.addHeaderParameter(oCustomerHeaderToken);
             },
 
-            onFileBeforeUpload() {
+            onFileBeforeUpload(oEvent) {
 
                 let oCustomerHeaderSlug = new sap.m.UploadCollectionParameter({
 
@@ -218,13 +226,13 @@ sap.ui.define(
 
             },
 
-            onFileUploadComplete() {
+            onFileUploadComplete(oEvent) {
 
                 oEvent.getSource().getBinding("items").refresh();
 
             },
 
-            onFileDeleted() {
+            onFileDeleted(oEvent) {
 
                 var oUploadCollection = oEvent.getSource();
 

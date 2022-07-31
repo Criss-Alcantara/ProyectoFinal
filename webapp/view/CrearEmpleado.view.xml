@@ -11,15 +11,15 @@
                 <pages>
                     <Page>
                         <content>
-                            <Wizard id="W_CrearEmpleado" complete="wizardCompletedHandler">
+                            <Wizard id="W_CrearEmpleado" complete="onSaveEmp">
                                 <WizardStep id="WS_Tipo_Emp" title="{i18n>tipo}" validated="true">
                                     <MessageStrip class="sapUiSmallMarginBottom" text="{i18n>tipoDesc}" showIcon="true"/>
                                     <HBox alignItems="Center" justifyContent="Center">
                                         <SegmentedButton selectionChange="onStep2">
                                             <items>
-                                                <SegmentedButtonItem id="interno" text="{i18n>intern}"/>
-                                                <SegmentedButtonItem id="autonomo" text="{i18n>freelands}"/>
-                                                <SegmentedButtonItem id="gerente" text="{i18n>manager}"/>
+                                                <SegmentedButtonItem id="intern" text="{i18n>intern}"/>
+                                                <SegmentedButtonItem id="freelands" text="{i18n>freelands}"/>
+                                                <SegmentedButtonItem id="manager" text="{i18n>manager}"/>
                                             </items>
                                         </SegmentedButton>
                                     </HBox>
@@ -28,31 +28,31 @@
                                     <MessageStrip class="sapUiSmallMarginBottom" text="{i18n>dataDesc}" showIcon="true"/>
                                     <f:SimpleForm editable="true">
                                         <Label text="{i18n>nombre}" required="true"/>
-                                        <Input valueState="{/_FirstNameState}" change="onValidarData" value="{/FirstName}"/>
+                                        <Input valueState="{/_FirstNameState}" change="onValidarNombre" value="{/FirstName}"/>
                                         <Label text="{i18n>apellidos}" required="true"/>
-                                        <Input valueState="{/_LastNameState}" change="onValidarData" value="{/LastName}"/>
+                                        <Input valueState="{/_LastNameState}" change="onValidarApellido" value="{/LastName}"/>
                                         <Label text="{= ${/_type} === 'Autonomo' ? ${i18n>CIF} : ${i18n>DNI}}" required="true"/>
                                         <Input value="{/Dni}" valueState="{/_DniState}" change="onValidateDNI"></Input>
                                         <Label text="{= ${/_type} === 'Autonomo' ? ${i18n>precioDiario} : ${i18n>SBA}}"/>
                                         <VBox>
-                                            <Slider visible="{= ${/_type} === 'Interno'}" min="12000" max="80000" value="{/_Salary}" step="1000" class="sapUiSmallMarginBottom" enableTickmarks="true" progress="false" showAdvancedTooltip="true">
+                                            <Slider visible="{= ${/_type} === 'Interno'}" min="12000" max="80000" value="{/Salary}" step="1000" class="sapUiSmallMarginBottom" enableTickmarks="true" progress="false" showAdvancedTooltip="true">
                                                 <ResponsiveScale tickmarksBetweenLabels="100%" />
                                             </Slider>
-                                            <Slider visible="{= ${/_type} === 'Gerente'}" min="50000" max="200000" value="{/_Salary}" step="1000" class="sapUiSmallMarginBottom" enableTickmarks="true" progress="false" showAdvancedTooltip="true">
+                                            <Slider visible="{= ${/_type} === 'Gerente'}" min="50000" max="200000" value="{/Salary}" step="1000" class="sapUiSmallMarginBottom" enableTickmarks="true" progress="false" showAdvancedTooltip="true">
                                                 <ResponsiveScale tickmarksBetweenLabels="100%"/>
                                             </Slider>
-                                            <Slider visible="{= ${/_type} === 'Autonomo'}" min="100" max="2000" value="{/_Salary}" step="100" class="sapUiSmallMarginBottom" enableTickmarks="true" progress="false" showAdvancedTooltip="true">
+                                            <Slider visible="{= ${/_type} === 'Autonomo'}" min="100" max="2000" value="{/Salary}" step="100" class="sapUiSmallMarginBottom" enableTickmarks="true" progress="false" showAdvancedTooltip="true">
                                                 <ResponsiveScale tickmarksBetweenLabels="100%"/>
                                             </Slider>
                                         </VBox>
                                         <Label text="{i18n>fechaInicio}" required="true"/>
-                                        <DatePicker dateValue="{/CreationDate}" required="true" valueState="{/CreationDateState}"/>
+                                        <DatePicker dateValue="{/CreationDate}" required="true" valueState="{/_CreationDateState}"  change="onValidarFecha"/>
                                     </f:SimpleForm>
                                 </WizardStep>
-                                <WizardStep id="WS_Data_Adic" title="{i18n>dataAdic}" validated="true">
+                                <WizardStep id="WS_Data_Adic" title="{i18n>dataAdic}" validated="true" activate="onValidateData">
                                     <MessageStrip class="sapUiSmallMarginBottom" text="{i18n>dataAdicDesc}" showIcon="true"/>
-                                    <Label text="{i18n>comentario}"/>
-                                    <TextArea id="textAreaWithoutBinding" value="{/Comments}" showExceededText="true" maxLength="200" width="100%" />
+                                    <Label text="{i18n>comentario}" width="100%"/>
+                                    <TextArea value="{/Comments}" width="100%" />
                                     <UploadCollection id="uploadCollection" maximumFilenameLength="55" maximumFileSize="10" multiple="true" sameFilenameAllowed="true" instantUpload="false" uploadUrl="/sap/opu/odata/sap/ZEMPLOYEES_SRV/Attachments" change="onFileChange" uploadComplete="onFileUploadComplete" beforeUploadStarts="onFileBeforeUpload" fileDeleted="onFileDeleted" />
                                 </WizardStep>
                             </Wizard>
@@ -60,11 +60,11 @@
                         <footer>
                             <OverflowToolbar>
                                 <ToolbarSpacer/>
-                                <Button text="{i18n>cancelar}" press="onCancel"/>
+                                <Button text="{i18n>cancelar}" press="onCancelFirst"/>
                             </OverflowToolbar>
                         </footer>
                     </Page>
-                    <Page title="{i18n>resumen}">
+                    <Page title="{i18n>resumen}" id="revisarData">
                         <core:Fragment fragmentName="proyectofinal.proyectofinal.fragment.ValidarDatos" type="XML"/>
                         <footer>
                             <Toolbar>

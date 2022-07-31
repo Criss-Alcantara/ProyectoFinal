@@ -12,7 +12,7 @@
                     <Button icon="sap-icon://nav-back" press="onBack"></Button>
                     <SearchField liveChange="onBuscar" width="100%" />
                 </Toolbar>
-                <List id="allEmplo" itemPress="onItem" items="{ path: 'oDataModel>/Users', filters:[ {path: 'SapId', operator: 'EQ', value1: 'training@logaligroup.com'}]  }">
+                <List id="allEmplo" itemPress="onItem" items="{ path: 'oDataModel>/Users', filters:[ {path: 'SapId', operator: 'EQ', value1: 'alcantaralc3@gmail.com'}]  }">
                     <items>
                         <StandardListItem title="{oDataModel>FirstName} {oDataModel>LastName}" description="{oDataModel>Dni}" type="Active" />
                     </items>
@@ -20,7 +20,7 @@
             </Page>
         </masterPages>
         <detailPages>
-            <Page showHeader="false">
+            <Page id="detalle" showHeader="false">
                 <FlexBox alignItems="Center" justifyContent="Center" height="100%">
                     <Label text="{i18n>selEmpleado}" />
                 </FlexBox>
@@ -37,17 +37,19 @@
                     <IconTabBar class="sapUiResponsiveContentPadding">
                         <items>
                             <IconTabFilter icon="sap-icon://attachment" text="{i18n>ficheros}">
-                                <UploadCollection maximumFilenameLength="55" maximumFileSize="10" multiple="true" sameFilenameAllowed="true" instantUpload="true" uploadUrl="/sap/opu/oData/sap/ZEMPLOYEES_SRV/Attachments" items="{oDataModel>UserToAttachment}" change="onFileChange" uploadComplete="onFileUploadComplete" beforeUploadStarts="onFileBeforeUploadStart" fileDeleted="onFileDeleted">
+                                <UploadCollection maximumFilenameLength="55" maximumFileSize="10" multiple="true" sameFilenameAllowed="true" instantUpload="true" uploadUrl="sap/opu/odata/sap/ZEMPLOYEES_SRV/Attachments" items="{oDataModel>UserToAttachment}" change="onFileChange" beforeUploadStarts="onFileBeforeUpload" uploadComplete="onFileUploadComplete" fileDeleted="onFileDeleted">
                                     <items>
                                         <UploadCollectionItem documentId="{oDataModel>AttId}" visibleEdit="false" fileName="{oDataModel>DocName}" press="onDownload"/>
                                     </items>
                                 </UploadCollection>
                             </IconTabFilter>
                             <IconTabFilter icon="sap-icon://money-bills" text="{i18n>salary}">
-                                <time:Timeline enableDoubleSided="true" groupBy="CreationDate" growingThreshold="0" sortOldestFirst="true" height="100%" content="{oModelData>UserToSalary}">
+                                <time:Timeline enableDoubleSided="true" groupByType="Year" growingThreshold="0" sortOldestFirst="true" height="100%" content="{oModelData>UserToSalary}">
                                     <time:content>
-                                        <time:TimelineItem userName="{parts:[{path:'oDataModel>Ammount'},{path:'oDataModel>Waers'}], type: 'sap.ui.model.type.Currency',
-												formatOptions: {showMeasure: false}}" icon="sap-icon://circle-task" text="{oDataModel>Comments}" dateTime="{oDataModel>CreationDate}"/>
+                                        <time:TimelineItem userName="{parts:[{path:'oDataModel>Ammount'},{path:'oDataModel>Waers'}],
+												type: 'sap.ui.model.type.Currency',
+												formatOptions: {showMeasure: false}}" icon="sap-icon://circle-task" text="{oDataModel>Comments}" dateTime="{oDataModel>CreationDate}">
+                                        </time:TimelineItem>
                                     </time:content>
                                 </time:Timeline>
                             </IconTabFilter>
