@@ -1,0 +1,45 @@
+<core:FragmentDefinition xmlns:core="sap.ui.core"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m"
+    xmlns:form="sap.ui.layout.form">
+    <form:SimpleForm title="1. {i18n>tipo}" layout="ResponsiveGridLayout">
+        <form:content>
+            <Label text="{i18n>tipo}"/>
+            <Text text="{=${/_type} === 'Interno' ? ${i18n>intern} : ${/_type} === 'Autonomo' ? ${i18n>freelands} : ${i18n>manager}}"/>
+            <Link press="onEditType" text="{i18n>editar}" />
+        </form:content>
+    </form:SimpleForm>
+
+    <form:SimpleForm title="2. {i18n>dataEmp}" layout="ResponsiveGridLayout">
+        <form:content>
+            <Label text="{i18n>nombre}"/>
+            <Text text="{/FirstName}"/>
+            <Label text="{i18n>apellidos}"/>
+            <Text text="{/LastName}"/>
+            <Label text="{= ${/_type} === 'Autonomo' ? ${i18n>CIF} : ${i18n>DNI}}"/>
+            <Text text="{/Dni}"/>
+            <Label text="{= ${/_type} === 'Autonomo' ? ${i18n>precioDiario} : ${i18n>SBA}}"/>
+            <Text text="{/_Salary}"/>
+            <Label text="{i18n>fechaInicio}"/>
+            <Text text="{path:'/CreationDate',type:'sap.ui.model.type.Date'}"/>
+            <Link press="onEditData" text="{i18n>editar}" />
+        </form:content>
+    </form:SimpleForm>
+
+    <form:SimpleForm title="3. {i18n>dataAdic}" layout="ResponsiveGridLayout">
+        <form:content>
+            <Label text="{i18n>comentario}"/>
+            <Text text="{/Comments}"/>
+            <Label text="{i18n>documentos}"/>
+            <Text text="{/_numFiles} {i18n>ficheros}"/>
+            <Label></Label>
+            <List items="{/_files}">
+                <items>
+                    <StandardListItem title="{DocName}"></StandardListItem>
+                </items>
+            </List>
+            <Link press="onEditDataAdic" text="{i18n>editar}" />
+        </form:content>
+    </form:SimpleForm>
+
+</core:FragmentDefinition>

@@ -7,7 +7,7 @@
 
     <SplitApp id="SA_VerEmployee">
         <masterPages>
-            <Page title="{i18n>VerEmpleado}" showHeader="false">
+            <Page title="{i18n>verEmpleado}" showHeader="false">
                 <Toolbar class="sapUiTinyMarginTop">
                     <Button icon="sap-icon://nav-back" press="onBack"></Button>
                     <SearchField liveChange="onBuscar" width="100%" />
@@ -22,28 +22,28 @@
         <detailPages>
             <Page showHeader="false">
                 <FlexBox alignItems="Center" justifyContent="Center" height="100%">
-                    <Label text="{i18n>SelEmpleado}" />
+                    <Label text="{i18n>selEmpleado}" />
                 </FlexBox>
             </Page>
-            <Page id="detalleEmp" title="{i18n>DetaEmpleado}">
+            <Page id="detalleEmp" title="{i18n>detaEmpleado}">
                 <content>
                     <ObjectHeader icon="{= ${oDataModel>Type} === '0' ? 'sap-icon://employee-pane' : ${oDataModel>Type} === '1' ? 'sap-icon://employee' : 'sap-icon://leads' }" title="{oDataModel>FirstName} {oDataModel>LastName}" intro="{oDataModel>Dni}" responsive="true">
                         <attributes>
-                            <ObjectAttribute title="{i18n>FechaInicio}" text="{path:'oDataModel>CreationDate',type:'sap.ui.model.type.Date'}" />
-                            <ObjectAttribute title="{i18n>Tipo}" text="{= ${oDataModel>Type} === '0' ? ${i18n>intern}  : ${oDataModel>Type} === '1' ? ${i18n>freelands}: ${i18n>manager} }" />
-                            <ObjectAttribute title="{i18n>Comentario}" text="{oDataModel>Comments}" />
+                            <ObjectAttribute title="{i18n>fechaInicio}" text="{path:'oDataModel>CreationDate',type:'sap.ui.model.type.Date'}" />
+                            <ObjectAttribute title="{i18n>tipo}" text="{= ${oDataModel>Type} === '0' ? ${i18n>intern}  : ${oDataModel>Type} === '1' ? ${i18n>freelands}: ${i18n>manager} }" />
+                            <ObjectAttribute title="{i18n>comentario}" text="{oDataModel>Comments}" />
                         </attributes>
                     </ObjectHeader>
                     <IconTabBar class="sapUiResponsiveContentPadding">
                         <items>
-                            <IconTabFilter icon="sap-icon://attachment" text="{i18n>Ficheros}">
+                            <IconTabFilter icon="sap-icon://attachment" text="{i18n>ficheros}">
                                 <UploadCollection maximumFilenameLength="55" maximumFileSize="10" multiple="true" sameFilenameAllowed="true" instantUpload="true" uploadUrl="/sap/opu/oData/sap/ZEMPLOYEES_SRV/Attachments" items="{oDataModel>UserToAttachment}" change="onFileChange" uploadComplete="onFileUploadComplete" beforeUploadStarts="onFileBeforeUploadStart" fileDeleted="onFileDeleted">
                                     <items>
                                         <UploadCollectionItem documentId="{oDataModel>AttId}" visibleEdit="false" fileName="{oDataModel>DocName}" press="onDownload"/>
                                     </items>
                                 </UploadCollection>
                             </IconTabFilter>
-                            <IconTabFilter icon="sap-icon://money-bills" text="{i18n>Salary}">
+                            <IconTabFilter icon="sap-icon://money-bills" text="{i18n>salary}">
                                 <time:Timeline enableDoubleSided="true" groupBy="CreationDate" growingThreshold="0" sortOldestFirst="true" height="100%" content="{oModelData>UserToSalary}">
                                     <time:content>
                                         <time:TimelineItem userName="{parts:[{path:'oDataModel>Ammount'},{path:'oDataModel>Waers'}], type: 'sap.ui.model.type.Currency',
