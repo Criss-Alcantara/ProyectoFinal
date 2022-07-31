@@ -1,0 +1,8 @@
+<mvc:View controllerName="proyectofinal.proyectofinal.controller.CrearEmpleado"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m"
+    xmlns:f="sap.ui.layout.form"
+    xmlns:core ="sap.ui.core"
+    xmlns:time="sap.suite.ui.commons">
+
+</mvc:View>

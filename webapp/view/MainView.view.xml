@@ -1,7 +1,21 @@
-<mvc:View controllerName="proyectofinal.proyectofinal.controller.MainView"
-    xmlns:mvc="sap.ui.core.mvc" displayBlock="true"
-    xmlns="sap.m">
-    <Page id="page" title="{i18n>title}">
-        <content />
+<mvc:View controllerName="proyectofinal.proyectofinal.controller.MainView" displayBlock="true"
+    xmlns="sap.m"
+    xmlns:mvc="sap.ui.core.mvc">
+    <Page title="{i18n>MenuPrincipal}">
+        <content>
+            <Panel id="page" headerText="{i18n>Empleados}" expandable="true">
+                <GenericTile headerImage="sap-icon://add-employee" class="sapUiTinyMarginBegin sapUiTinyMarginTop" press="onCrearEmpleado">
+                    <TileContent footer="{i18n>CrearEmpleado}"/>
+                </GenericTile>
+                <GenericTile headerImage="sap-icon://employee-lookup" class="sapUiTinyMarginBegin sapUiTinyMarginTop" press="onVerEmpleado">
+                    <TileContent footer="{i18n>VerEmpleado}"/>
+                </GenericTile>
+            </Panel>
+            <Panel headerText="{i18n>Pedidos}" expandable="true">
+                <GenericTile headerImage="sap-icon://signature" class="sapUiTinyMarginBegin sapUiTinyMarginTop" press="onFirmarPedidos">
+                    <TileContent footer="{i18n>Pedido}"/>
+                </GenericTile>
+            </Panel>
+        </content>
     </Page>
 </mvc:View>

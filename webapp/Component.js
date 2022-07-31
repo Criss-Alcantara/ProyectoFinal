@@ -1,8 +1,8 @@
 sap.ui.define([
-        "sap/ui/core/UIComponent",
-        "sap/ui/Device",
-        "proyectofinal/proyectofinal/model/models"
-    ],
+    "sap/ui/core/UIComponent",
+    "sap/ui/Device",
+    "proyectofinal/proyectofinal/model/models"
+],
     function (UIComponent, Device, models) {
         "use strict";
 
@@ -25,7 +25,8 @@ sap.ui.define([
 
                 // set the device model
                 this.setModel(models.createDeviceModel(), "device");
-            }
+            },
+            SapId: "training@logaligroup.com"
         });
     }
 );

@@ -1,5 +1,5 @@
 {
-  "_version": "1.40.0",
+  "_version": "1.1.0",
   "sap.app": {
     "id": "proyectofinal.proyectofinal",
     "type": "application",
@@ -16,13 +16,12 @@
       "toolsId": "692b70ad-606c-46b2-9949-aed4a97fd4d6"
     },
     "dataSources": {
-      "mainService": {
-        "uri": "/sap/opu/odata/",
+      "ZEMPLOYEES_SRV": {
+        "uri": "/sap/opu/odata/sap/ZEMPLOYEES_SRV/",
         "type": "OData",
         "settings": {
-          "annotations": [],
-          "localUri": "localService/metadata.xml",
-          "odataVersion": "2.0"
+          "odataVersion": "2.0",
+          "localUri": "localService/metadata.xml"
         }
       }
     }
@@ -44,7 +43,7 @@
     }
   },
   "sap.ui5": {
-    "flexEnabled": true,
+    "flexEnabled": false,
     "dependencies": {
       "minUI5Version": "1.102.1",
       "libs": {
@@ -69,10 +68,24 @@
           "bundleName": "proyectofinal.proyectofinal.i18n.i18n"
         }
       },
+      "oDataModel": {
+        "type": "sap.ui.model.odata.v2.ODataModel",
+        "settings": {
+          "defaultOperationMode": "Server",
+          "defaultBindingMode": "OneWay",
+          "defaultCountMode": "Request"
+        },
+        "dataSource": "ZEMPLOYEES_SRV",
+        "preload": true
+      },
       "": {
-        "dataSource": "mainService",
+        "dataSource": "ZEMPLOYEES_SRV",
         "preload": true,
-        "settings": {}
+        "settings": {
+          "defaultBindingMode": "TwoWay",
+          "defaultCountMode": "Inline",
+          "refreshAfterChange": false
+        }
       }
     },
     "resources": {
@@ -95,9 +108,23 @@
       "routes": [
         {
           "name": "RouteMainView",
-          "pattern": ":?query:",
+          "pattern": "",
           "target": [
             "TargetMainView"
+          ]
+        },
+        {
+          "name": "CrearEmpleado",
+          "pattern": "create",
+          "target": [
+            "TargetCrearEmpleado"
+          ]
+        },
+        {
+          "name": "VerEmpleado",
+          "pattern": "view",
+          "target": [
+            "TargetVerEmpleado"
           ]
         }
       ],
@@ -108,6 +135,20 @@
           "clearControlAggregation": false,
           "viewId": "MainView",
           "viewName": "MainView"
+        },
+        "TargetCrearEmpleado": {
+          "viewType": "XML",
+          "transition": "slide",
+          "clearControlAggregation": true,
+          "viewId": "CrearEmpleado",
+          "viewName": "CrearEmpleado"
+        },
+        "TargetVerEmpleado": {
+          "viewType": "XML",
+          "transition": "slide",
+          "clearControlAggregation": true,
+          "viewId": "VerEmpleado",
+          "viewName": "VerEmpleado"
         }
       }
     },
