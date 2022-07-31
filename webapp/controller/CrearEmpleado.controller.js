@@ -264,7 +264,7 @@ sap.ui.define(
 
             },
 
-            onFileChange() {
+            onFileChange(oEvent) {
 
                 let oUplodCollection = oEvent.getSource();
 
@@ -279,7 +279,7 @@ sap.ui.define(
                 oUplodCollection.addHeaderParameter(oCustomerHeaderToken);
             },
 
-            onFileBeforeUpload() {
+            onFileBeforeUpload(oEvent) {
 
                 let oCustomerHeaderSlug = new sap.m.UploadCollectionParameter({
 
@@ -293,13 +293,13 @@ sap.ui.define(
 
             },
 
-            onFileUploadComplete() {
+            onFileUploadComplete(oEvent) {
 
                 oEvent.getSource().getBinding("items").refresh();
 
             },
 
-            onFileDeleted() {
+            onFileDeleted(oEvent) {
 
                 var oUploadCollection = oEvent.getSource();
 
@@ -381,7 +381,7 @@ sap.ui.define(
 
                     };
 
-                    this._model.setProperty("/_files", arrayFiles);
+                    this._model.setProperty("/_files", oArray);
 
                 } else {
 
